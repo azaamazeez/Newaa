@@ -74,6 +74,10 @@
             background-color: #ddd;
             cursor: not-allowed;
         }
+        #shareCountMessage {
+            font-size: 18px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -87,10 +91,15 @@
         <li>2. اضغط الزر رقم اثنين وهو سيقوم بنسخ النص والرابط لمشاركته عبر واتس آب.</li>
     </ul>
     <p><strong>ملاحظة:</strong> يرجى عدم ضغط زر 2 حتى تقوم بمشاركة المنشور لخمس أشخاص كي تصلك الهدية.</p>
+    
+    <!-- عرض عدد المشاركات المتبقية -->
+    <p id="shareCountMessage">المشاركات المتبقية للفوز: <span id="remainingShares">5</span></p>
+
     <div class="buttons">
         <button id="shareBtn" onclick="shareOnWhatsApp()">زر 1: شارك عبر واتس آب</button>
         <button id="copyBtn" onclick="copyAndShare()" disabled>زر 2: نسخ النص والرابط ومشاركته</button>
     </div>
+    
     <p id="timer-message">سيتم إرسال الرسالة تلقائيًا بعد <span id="timer">10</span> ثوانٍ...</p>
 
     <script>
@@ -106,6 +115,10 @@
         function shareOnWhatsApp() {
             // كلما شارك المستخدم، ازداد العد
             shareCount++;
+            // تحديث عدد المشاركات المتبقية
+            const remainingShares = 5 - shareCount;
+            document.getElementById("remainingShares").textContent = remainingShares;
+
             // تمكين زر 2 إذا كانت المشاركات 5 أو أكثر
             if (shareCount >= 5) {
                 document.getElementById("copyBtn").disabled = false;
