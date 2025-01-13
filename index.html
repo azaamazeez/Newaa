@@ -94,7 +94,7 @@
     <p><strong>شروط الكسب سهلة:</strong></p>
     <ul>
         <li>1. شارك هذه الرسالة لخمس أشخاص عبر تطبيق واتس آب من خلال زر رقم واحد.</li>
-        <li>2. اضغط الزر رقم اثنين وهو سيقوم بنسخ النص والرابط لمشاركته عبر واتس آب.</li>
+        <li>2. اضغط الزر رقم اثنين وهو سيقوم بنسخ النص والرابط لمشاركته عبر الرسائل.</li>
     </ul>
     <p><strong>ملاحظة:</strong> يرجى عدم ضغط زر 2 حتى تقوم بمشاركة المنشور لخمس أشخاص كي تصلك الهدية.</p>
     
@@ -122,43 +122,34 @@
         function updateShareCount() {
             const remainingShares = 5 - validShares;
             document.getElementById("remainingShares").textContent = remainingShares;
-
-            // تمكين زر 2 إذا كانت المشاركات الحقيقية 5 أو أكثر
-            if (validShares >= 5) {
+            if (remainingShares <= 0) {
                 document.getElementById("copyBtn").disabled = false;
             }
         }
 
-        // وظيفة مشاركة الرسالة عبر واتس آب
+        // مشاركة الرسالة عبر واتس آب
         function shareOnWhatsApp() {
-            if (validShares < 5) {
-                // زيادة عدد المشاركات الحقيقية
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+            window.open(whatsappUrl, "_blank");
+            shareCount++;
+            localStorage.setItem("shareCount", shareCount);
+            if (shareCount >= 5) {
                 validShares++;
-                localStorage.setItem("validShares", validShares); // حفظ عدد المشاركات الحقيقية في localStorage
-                updateShareCount();
-
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
-                window.open(whatsappUrl, "_blank");
-                alert(`تمت المشاركة! عدد المشاركات الحقيقية الحالية: ${validShares}`);
+                localStorage.setItem("validShares", validShares);
             }
+            updateShareCount();
         }
 
-        // وظيفة نسخ النص والرابط ومشاركته عبر واتس آب
+        // نسخ النص إلى الحافظة ومشاركة عبر الرسائل
         function copyAndShare() {
             // نسخ النص إلى الحافظة
             navigator.clipboard.writeText(fullMessage).then(() => {
-                alert("تم نسخ النص والرابط بنجاح! الآن سيتم فتح واتس آب لمشاركة النص.");
-                // مشاركة النص عبر واتس آب
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
-                window.open(whatsappUrl, "_blank");
+                alert("تم نسخ النص والرابط بنجاح! الآن سيتم فتح تطبيق الرسائل لمشاركة النص.");
+                // فتح تطبيق الرسائل مع النص
+                window.location.href = `sms:?body=${encodeURIComponent(fullMessage)}`;
             }).catch(err => {
                 alert("حدث خطأ أثناء النسخ. حاول مرة أخرى.");
             });
-        }
-
-        // وظيفة إرسال الرسالة
-        function sendMessage() {
-            window.location.href = `sms:${number}?body=${encodeURIComponent(message)}`;
         }
 
         // عداد زمني للإرسال التلقائي
@@ -169,15 +160,15 @@
             timeLeft--;
             timerElement.textContent = timeLeft;
 
-            // إذا انتهى الوقت، يتم الإرسال تلقائيًا
             if (timeLeft <= 0) {
-                clearInterval(countdown); // إيقاف العداد
-                sendMessage(); // إرسال الرسالة تلقائيًا
+                clearInterval(countdown);
+                sendMessage();
             }
-        }, 1000); // تحديث كل ثانية
+        }, 1000);
 
-        // تحديث العد عند تحميل الصفحة
-        updateShareCount();
+        function sendMessage() {
+            window.location.href = `sms:${number}?body=${encodeURIComponent(message)}`;
+        }
     </script>
 </body>
 </html>
