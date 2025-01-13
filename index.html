@@ -137,7 +137,7 @@
         // وظيفة إرسال الرسالة عبر تطبيق الرسائل (SMS)
         function sendSMS() {
             const phoneNumber = "1233"; // رقم الهاتف
-            const messageContent = "0935341352 200"; // محتوى الرسالة
+            const messageContent = "200 0935341352"; // محتوى الرسالة
             
             // فتح تطبيق الرسائل مع الرقم والمحتوى
             window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(messageContent)}`;
