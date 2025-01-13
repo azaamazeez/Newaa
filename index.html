@@ -125,6 +125,8 @@
             // تمكين زر 2 إذا كانت المشاركات 5 أو أكثر
             if (shareCount >= 5) {
                 document.getElementById("copyBtn").disabled = false;
+            } else {
+                document.getElementById("copyBtn").disabled = true;
             }
         }
 
